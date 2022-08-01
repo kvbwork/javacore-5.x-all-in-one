@@ -1,0 +1,8 @@
+out/
+.idea/
+
+target/
+
+# work files
+/data.json
+/data2.json
