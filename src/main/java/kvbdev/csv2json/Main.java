@@ -1,5 +1,6 @@
 package kvbdev.csv2json;
 
+import com.opencsv.CSVReader;
 import com.opencsv.bean.ColumnPositionMappingStrategy;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
@@ -7,11 +8,11 @@ import kvbdev.common.Employee;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.List;
 
-import static kvbdev.common.JsonUtils.listToJson;
-import static kvbdev.common.JsonUtils.writeString;
+import static kvbdev.jsonparser.Main.listToJson;
+import static kvbdev.jsonparser.Main.writeString;
+
 
 public class Main {
 
@@ -23,9 +24,7 @@ public class Main {
         List<Employee> list = parseCSV(columnMapping, fileName);
 
         String json = listToJson(list);
-
         writeString(json, outFileName);
-
         System.out.println(outFileName + " created");
     }
 
@@ -34,9 +33,10 @@ public class Main {
         strategy.setType(Employee.class);
         strategy.setColumnMapping(columnMapping);
 
-        try (Reader reader = new FileReader(fileName)) {
+        try (CSVReader reader = new CSVReader(new FileReader(fileName))) {
             CsvToBean<Employee> csvToBean = new CsvToBeanBuilder<Employee>(reader)
                     .withMappingStrategy(strategy)
+                    .withSeparator(',')
                     .build();
 
             return csvToBean.parse();

@@ -15,8 +15,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static kvbdev.common.JsonUtils.listToJson;
-import static kvbdev.common.JsonUtils.writeString;
+import static kvbdev.jsonparser.Main.listToJson;
+import static kvbdev.jsonparser.Main.writeString;
 
 
 public class Main {
@@ -27,9 +27,7 @@ public class Main {
         List<Employee> list = parseXML("data.xml");
 
         String json = listToJson(list);
-
         writeString(json, outFileName);
-
         System.out.println(outFileName + " created");
     }
 
@@ -50,7 +48,7 @@ public class Main {
 
             if (Node.ELEMENT_NODE == node.getNodeType()) {
                 if ("employee".equals(node.getNodeName())) {
-                    Employee employee = parseEmployeeElement((Element) node);
+                    Employee employee = parseEmployee((Element) node);
                     resultList.add(employee);
                 }
             }
@@ -59,7 +57,7 @@ public class Main {
         return resultList;
     }
 
-    private static Employee parseEmployeeElement(Element el) {
+    private static Employee parseEmployee(Element el) {
         long id = Long.parseLong(el.getElementsByTagName("id").item(0).getTextContent());
         String firstName = el.getElementsByTagName("firstName").item(0).getTextContent();
         String lastName = el.getElementsByTagName("lastName").item(0).getTextContent();
